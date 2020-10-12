@@ -4,6 +4,11 @@ int a[1000006];
 int sub[1000006];
 using namespace std;
 
+void my_sort (int a[], int n){
+    
+}
+
+
 int main()
 {
     int n, k;
