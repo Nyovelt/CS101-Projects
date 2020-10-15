@@ -1,8 +1,6 @@
-#include <iostream>
-#include <algorithm>
-int a[1000006];
-int sub[1000006];
+#include<iostream>
 using namespace std;
+int a[9] = {3,5,2,1,4,9,8,7,6};
 
 int Partition(int A[], int left, int right)
 {
@@ -32,26 +30,9 @@ void QuickSort(int A[], int left, int right){
     }
 }
 
-int main()
-{
-    int n, k;
-    cin >> n >> k;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> a[i];
+int main(){
+    QuickSort(a,0,8);
+    for(int i=0;i<9;i++){
+        cout<<a[i]<<endl;
     }
-    QuickSort(a, 0,  n-1);
-
-    for (int i = 0; i < n - 1; i++)
-    {
-        sub[i] = a[i + 1] - a[i];
-    }
-    QuickSort(sub, 0, n-2 );
-
-    int ans = 0;
-    for (int i = 0; i < k; i++)
-    {
-        ans += sub[i];
-    }
-    cout << ans;
 }
