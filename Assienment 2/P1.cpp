@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <bits/stdc++.h>
 using namespace std;
-
+#define MAXN 1000006
 struct Edge
 {
 	int next;
@@ -14,13 +14,13 @@ void dfs(int node, int fa);
 void printG();
 int find_father(int node);
 int weak();
-int light[500005];
-struct Edge edge[500005];
+int light[MAXN];
+struct Edge edge[MAXN];
 int cnt, n, m, weight, ans;
-int head[500005];
-int weig[500005];
-int dis[500005];
-int fat[500005];
+int head[MAXN];
+int weig[MAXN];
+int dis[MAXN];
+int fat[MAXN];
 void add(int u, int v, int w)
 {
 	edge[cnt].w = w;		  //边权
