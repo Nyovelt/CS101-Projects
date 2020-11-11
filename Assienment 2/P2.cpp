@@ -17,21 +17,22 @@ void printHeap()
     cout << endl;
 }
 
-void max_heapify(int arr[], int start, int end)
+void min_heapify(int arr[], int start, int end)
 {
     int fa = start;
     int chd = 2 * fa + 1;
-    while (chd <= fa)
+    while (chd <= end)
     {
-        if (arr[chd] < arr[chd + 1] && chd + 1 <= end)
+        if (arr[chd] > arr[chd + 1] && chd + 1 <= end)
             chd++;
-        if (arr[fa] > arr[chd])
+        if (arr[fa] < arr[chd])
         {
             return;
         }
         else
         {
             swap(arr[fa], arr[chd]);
+            fa = chd;
             chd = 2 * fa + 1;
         }
     }
@@ -40,7 +41,7 @@ void max_heapify(int arr[], int start, int end)
 void push(int e)
 {
     int j = ++siz;
-    for (; j != 1 && e > heap[j / 2]; j /= 2)
+    for (; j != 1 && e < heap[j / 2]; j /= 2)
     {
         heap[j] = heap[j / 2];
     }
@@ -50,10 +51,10 @@ void push(int e)
 
 int pop()
 {
-    int ans = heap[0];
-    heap[0] = heap[--siz];
+    int ans = heap[1];
+    heap[1] = heap[siz--];
     for (int i = siz / 2 - 1; i >= 0; i--)
-        max_heapify(heap, i, siz - 1);
+        min_heapify(heap, i, siz - 1);
     printHeap();
     return ans;
 }
@@ -71,6 +72,8 @@ int main()
         {
             cout << " ans += t - pop();" << endl;
             ans += t - pop();
+            cout << "ans"
+                 << " " << ans << endl;
             cout << "push(t)" << endl;
             push(t);
 
