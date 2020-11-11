@@ -5,6 +5,7 @@ using namespace std;
 
 int n, ans, ans1, siz;
 int heap[MAXN];
+int flag[MAXN];
 
 void printHeap()
 {
@@ -46,7 +47,7 @@ void push(int e)
         heap[j] = heap[j / 2];
     }
     heap[j] = e;
-    printHeap();
+    //printHeap();
 }
 
 int pop()
@@ -55,7 +56,7 @@ int pop()
     heap[1] = heap[siz--];
     for (int i = siz / 2 - 1; i >= 0; i--)
         min_heapify(heap, i, siz - 1);
-    printHeap();
+    //printHeap();
     return ans;
 }
 
@@ -65,19 +66,26 @@ int main()
     for (int i = 0, t; i < n; i++)
     {
         cin >> t;
-        cout << "push(t)" << endl;
+        // cout << "push(t)" << endl;
         push(t);
-
+        flag[t]++;
         if (heap[1] < t)
         {
-            cout << " ans += t - pop();" << endl;
+            // cout << " ans += t - pop();" << endl;
+            cout << t << " " << heap[1] << endl;
+            flag[heap[1]]--;
+            if (flag[heap[1]] < 0)
+            {
+            }
+            else
+            {
+                ans1 += 2;
+            }
             ans += t - pop();
-            cout << "ans"
-                 << " " << ans << endl;
-            cout << "push(t)" << endl;
-            push(t);
-
-            ans1++;
+            // cout << "ans"
+            //      << " " << ans << endl;
+            // cout << "push(t)" << endl;
+            //push(t);
         }
     }
     cout << ans << " " << ans1 << flush;
