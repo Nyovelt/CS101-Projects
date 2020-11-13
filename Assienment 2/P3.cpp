@@ -1,22 +1,29 @@
 #include <bits/stdc++.h>
 #define MAXN 1000006
 #define MAXM 10000007
+#define ll long long
 using namespace std;
 int head[MAXN];
 int m, n, cnt, u, v;
 long long int ans;
+int fa[MAXN], pre[MAXN];
+int vis[MAXN];
+
+int fnd(int x)
+{
+    return fa[x] == x ? x : fa[x] = fnd(fa[x]);
+}
 
 struct Edge
 {
-    int to;
-    int nxt;
-};
+    int to, nxt;
+} edg[MAXM];
 
-struct Edge edg[MAXN];
+ll desi[MAXN];
 
 struct Desire
 {
-    long long int desire;
+    long long desire;
     int id;
 };
 
@@ -51,21 +58,19 @@ void printD()
     }
 }
 
-void del(int i)
+void ins(int id)
 {
-    int tmp[MAXN];
-    long long int max_des = 0;
-    memset(tmp, 0, sizeof(tmp));
-    for (int j = head[i]; j != -1; j = edg[j].nxt)
-    {
-        int k = find(edg[j].to);
-        tmp[++*tmp] = k;
-        max_des = max(max_des, des[k].desire);
-        //del_edge
-    }
-    //add  edge
-    ans += des[1].desire - max_des;
-    //del  des[1]
+    vis[id]++;
+    ll min_d = 1e9, max_d = 0;
+    for (int i = head[id]; i != -1; i = edg[i].nxt)
+        if (vis[edg[i].to])
+        {
+            min_d = min(min_d, desi[fnd(edg[i].to)]);
+            max_d = max(max_d, desi[fnd(edg[i].to)]);
+            if(fnd(edg[i].to) != id) 
+                pre[fnd(edg[i].to)] =id, fa[fnd(edg[i].to)] = id;
+        }
+    desi[id] = min(min_d, desi[id]);
 }
 
 int find(int id)
@@ -83,10 +88,13 @@ int main()
 {
     memset(head, -1, sizeof(head));
     cin >> n >> m;
+    for (int i = 0; i <= n; i++)
+        fa[i] = i;
     for (int i = 1; i <= n; i++)
     {
         cin >> des[i].desire;
         des[i].id = i;
+        desi[i] = des[i].desire;
     }
     for (int i = 0; i < m; i++)
     {
@@ -94,11 +102,11 @@ int main()
         add(u, v);
         add(v, u);
     }
-    while (des[1].desire)
-    {
-        sort(des + 1, des + n + 1, cmp);
-        del(des[1].id);
-        printD();
-    }
+    sort(des + 1, des + n + 1, cmp);
+    for (int i = 1; i <= n; i++)
+        ins(des[i].id);
+    //std::cout<<ans<<std::endl;
+    for (int i = 1; i <= n; i++)
+        ans += desi[i] - desi[pre[i]];
     cout << ans << flush;
 }
