@@ -5,7 +5,7 @@
 int cnt, n, m, v, e, a_v, a_e;
 int head[MAXN], vis[MAXN], vis_e[2 * MAXM];
 
-// using namespace std;
+using namespace std;
 
 struct Edge
 {
@@ -32,8 +32,7 @@ void dfs(int node)
         {
             vis_e[i] = 1;
             e++;
-            if (!vis[edg[i].to])
-                dfs(edg[i].to);
+            dfs(edg[i].to);
         }
     }
 }
@@ -44,7 +43,7 @@ int main()
     scanf("%d %d", &n, &m);
     for (int i = 0; i < m; i++)
     {
-        int u;
+        int u, v;
         scanf("%d %d", &u, &v);
         add(u, v);
         add(v, u);
@@ -67,5 +66,5 @@ int main()
             //std::cout << "ans " << (a_e - a_v) << std::endl;
         }
     }
-    printf("%d", (a_e - a_v));
+    printf("%d",  (a_e - a_v));
 }
