@@ -1,3 +1,4 @@
+#pragma GCC optimize(2)
 #include <bits/stdc++.h>
 #define ll long long
 #define N 1000006
@@ -12,11 +13,11 @@ class Splay
 	{
 		int son[2], fa, size, cnt, v;
 	}t[N];
-	void pushup (int x) 
+	inline void pushup (int x) 
 	{ 
 		t[x].size = t[lc].size + t[rc].size + t[x].cnt; 
 	}
-	void rotate (int x, int& k)
+	inline void rotate (int x, int& k)
 	{
 		int y = t[x].fa, z = t[y].fa, l, r;
 		l = (t[y].son[0] == x) ? 0 : 1; r = l ^ 1;
@@ -27,7 +28,7 @@ class Splay
 		t[y].son[l] = t[x].son[r], t[x].son[r] = y;
 		pushup (y), pushup (x);
 	}
-	void splay (int x, int& k)
+	inline void splay (int x, int& k)
 	{
 		while (x != k)
 		{
@@ -40,24 +41,24 @@ class Splay
 			rotate (x, k);
 		}
 	}
-	int create (int x) { t[++cnt].v = x, t[cnt].size = t[cnt].cnt = 1; return cnt; }
+	inline int create (int x) { t[++cnt].v = x, t[cnt].size = t[cnt].cnt = 1; return cnt; }
 public:
-    int size(){
+    inline int size(){
         return t[rt].size;
     }
-	int pre ()
+	inline int pre ()
 	{
 		int x = t[rt].son[0];
-		for (; rc; x = rc);
+		while(rc) x = rc;
 		return x;
 	}
-	int nex ()
+	inline int nex ()
 	{
 		int x = t[rt].son[1];
-		for (; lc; x = lc);
+		while(lc) x = lc;
 		return x;
 	}
-	void insert (int x)
+	inline void insert (int x)
 	{
 		if (!rt) return (void)(rt = create (x));
 		int now = rt, fa = 0;
@@ -76,7 +77,7 @@ public:
 		}
 	}
 
-    int kth(int k){
+    inline int kth(int k){
         int x = rt;
         while(1){
             if(lc  && k <= t[lc].size){
@@ -93,7 +94,7 @@ public:
         }
     }
 
-    int rk(int k){
+    inline int rk(int k){
         int res=0, x=rt;
         while(lc || rc){
             if(k < t[x].v){
@@ -111,7 +112,7 @@ public:
         }
     }
 
-	int findpos (int x)
+	inline int findpos (int x)
 	{
 		int now = rt, ret = 0;
 		while (1)
@@ -125,7 +126,7 @@ public:
 			}
 		}
 	}
-	int findpit (int x)
+	inline int findpit (int x)
 	{
 		int now = rt;
 		while (1)
@@ -139,10 +140,10 @@ public:
 			else now = t[now].son[0];
 		}
 	}
-	void Delete (int x)
+	inline void Delete (int x)
 	{
 		findpos (x);
-		if (t[rt].cnt > 1) { t[rt].cnt--, t[rt].size--; return; }
+		if (t[rt].cnt > 1) { --t[rt].cnt, --t[rt].size; return; }
 
 		if (!t[rt].son[0] && !t[rt].son[1]) { rt = 0; return; }
 		if (!t[rt].son[0]) { rt = t[rt].son[1], t[rt].fa = 0; return; }
@@ -152,14 +153,14 @@ public:
 		t[rt].son[1] = t[las].son[1], t[t[las].son[1]].fa = rt;
 		pushup (rt);
 	}
-	void findpre (int x) { insert (x), printf ("%d\n", t[pre ()].v), Delete (x); }
-	void findnex (int x) { insert (x), printf ("%d\n", t[nex ()].v), Delete (x); }
+	inline void findpre (int x) { insert (x), printf ("%d\n", t[pre ()].v), Delete (x); }
+	inline void findnex (int x) { insert (x), printf ("%d\n", t[nex ()].v), Delete (x); }
 }T;
 
 struct AVL
 {
-    void insert(int v) { T.insert(v); a_size++;};
-    void remove(int v) { T.Delete(v); a_size--;};
+    inline void insert(int v) { T.insert(v); a_size++;};
+    inline void remove(int v) { T.Delete(v); a_size--;};
     int kth(int k) {  return T.kth(k + 1);};
     int rank(int v) { T.insert(v); int res = T.rk(v); T.Delete(v); return res;};
     int size() { return a_size; };
