@@ -25,8 +25,8 @@ void printResult(){
 
 void simulateAnneal()
 {
-    double t = 20;
-    while (t > 0.001)
+    double t = 10000000;
+    while (t > 0.1)
     {
         
         int c1 = 2 + Rand() * (n-1) , c2 = 2 +  Rand() * (n-1) ;
@@ -39,15 +39,18 @@ void simulateAnneal()
                 memcpy(ans, route, sizeof(route));
                 ans_dis = new_dis;
             }
-            if (exp(- new_dis / t) > Rand() || new_dis < old_dis)
+            if ( new_dis < old_dis)
             {
+                old_dis = new_dis;
+            }
+            else if(exp(- new_dis / t) > Rand() ){
                 old_dis = new_dis;
             }
             else
             {
                 std::swap(route[c1], route[c2]);
             }
-            t *= 0.98;
+            t *= 0.99999;
         }
     }
 }
@@ -61,9 +64,16 @@ int main()
     for (i = 1; i <= n; ++i)
         for (j = 1; j <= n; ++j)
             scanf("%d", &dis[i][j]), route[i] = i;
-    while ((double)clock() / CLOCKS_PER_SEC < MAX_TIME)
+    // while ((double)clock() / CLOCKS_PER_SEC < MAX_TIME)
+    // {
+    //    simulateAnneal();
+    // }
+    int t1 = clock() ;
+    simulateAnneal();
+    int t2 =clock()  ;
+    while (((double)clock()+ t2 - t1) / CLOCKS_PER_SEC < MAX_TIME)
     {
-        simulateAnneal();
+       simulateAnneal();
     }
     for (i = 1; i < n; i++)
         printf("%d ", ans[i]);
