@@ -1,8 +1,8 @@
-#pragma GCC optimize(3)
+#pragma GCC optimize(2)
 
 #include <bits/stdc++.h>
 #define MAXN 30000
-#define MAXE 1000000
+#define MAXE 500000
 #define INF 0x3f3f3f3f
 
 int u, v, w, n, m, k, s, cnt, ql = 1, qr, cnt2,siz;
@@ -12,7 +12,7 @@ int que[MAXN * 100];
 
 
 
-inline int fnd(int x)
+ int fnd(int x)
 {
     return fa[x] == x ? x : fa[x] = fnd(fa[x]);
 }
@@ -29,13 +29,13 @@ struct vertex
     bool operator<(const vertex &x) const
     {
         //return (dpt[pos] == dpt[x.pos]) ? dis > x.dis : dpt[pos] > dpt[x.pos];
-        return !( dpt[pos] > dpt[x.pos] || dpt[pos] == dpt[x.pos] && dis > x.dis );
+        return dpt[pos] > dpt[x.pos] || dpt[pos] == dpt[x.pos] && dis > x.dis ;
     }
-} heap[MAXN * 100];
+} heap[MAXN];
 
-inline void push(vertex e)
+ void push(vertex e)
 {
-    int j = ++siz;
+    register int j = ++siz;
     for (; j != 1 && e < heap[j / 2]; j /= 2)
     {
         heap[j] = heap[j / 2];
@@ -43,17 +43,17 @@ inline void push(vertex e)
     heap[j] = e;
 }
 
-inline vertex pop()
+ vertex pop()
 {
     vertex ans = heap[1];
     heap[1] = heap[siz--];
 
-    // for (int i = siz / 2; i > 0; i--)
+    // for (register int i = siz / 2; i > 0; i--)
     //     min_heapify( i, siz);
     
     int i = 1;
     while(i*2  <= siz){
-        int j = i * 2;
+        register int j = i * 2;
         if(  heap[j+1] < heap[j] && j+1<=siz){
             j++;
         }
@@ -66,7 +66,7 @@ inline vertex pop()
     return ans;
 }
 
-inline void add(int u, int v, int w, bool ein)
+ void add(int u, int v, int w, bool ein)
 {
     edg[cnt].to = v;
     edg[cnt].nxt = head[u];
@@ -77,7 +77,7 @@ inline void add(int u, int v, int w, bool ein)
 
 std::priority_queue<vertex> q;
 
-inline void calcDepth()
+ void calcDepth()
 {
     for (register int i = 1; i <= n; i++)
         if (fa[i] == i && !in[i])
@@ -96,7 +96,7 @@ inline void calcDepth()
         dpt[i] = dpt[fnd(i)];
 }
 
-inline void dijkstra(int s)
+ void dijkstra(int s)
 {
     //q.push((vertex){s, dis[s]=0});
     push((vertex){s, dis[s]=0});
@@ -104,8 +104,9 @@ inline void dijkstra(int s)
     //while(!q.empty())
     {
         //vertex t = q.top();
-        //q.pop();
+        //q.pop();scs
         vertex t = pop();
+        if(rand() % 10000 == 222) printf("%d\n", t.pos);
         int pos = t.pos;
         //std::cout << "pos: "<<pos<<std::endl;
         
